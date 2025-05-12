@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <html lang="en">
+<head>
+     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Converter</title>
+    </head>
+  <body>
+     <!-- The grid: three columns -->
+<div class="row">
+  <div class="column" onclick="openTab('b1');" style="background:green;">Box 1</div>
+  <div class="column" onclick="openTab('b2');" style="background:blue;">Box 2</div>
+  <div class="column" onclick="openTab('b3');" style="background:red;">Box 3</div>
+</div>
+
+<!-- The expanding grid (hidden by default) -->
+<div id="b1" class="containerTab" style="display:none;background:green">
+  <!-- If you want the ability to close the container, add a close button -->
+  <span onclick="this.parentElement.style.display='none'" class="closebtn">x</span>
+  <h2>Money Converter</h2>
+</div>
+
+
+<div class="converter">
+    <h2>Time Converter</h2>
+    <input type="number" id="hours" placeholder="Enter hours" min="0"> 
+    <button onclick="convertToMinutes()">Convert to Minutes</button>
+    <p id="minutesResult">x</p>
+    <hr>
+    <input type="number" id="minutes" placeholder="Enter minutes" min="0"> 
+    <button onclick="convertToHours()">Convert to Hours</button>
+    <p id="hoursResult">x</p>
+</div>
+
+
+
+<div id="b3" class="containerTab" style="display:none;background:red">
+  <span onclick="this.parentElement.style.display='none'" class="closebtn">x</span>
+  <h2>Weight Converter</h2>
+  <p>
+  <label>Pounds</label>
+  <input id="inputPounds" type="number" placeholder="Pounds"
+  oninput="weightConverter(this.value)" onchange="weightConverter(this.value)">
+</p>
+<p>Grams: <span id="outputGrams"></span></p>
+</div>
+<div class="converter">
+        
+
+  </body>
+</html>
