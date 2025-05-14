@@ -57,5 +57,23 @@
             labelContainer.childNodes[i].innerHTML = classPrediction;
         }
     }
+    const output = await replicate.run(
+  "zsxkib/step1x-edit:12b5a5a61e3419f792eb56cfc16eed046252740ebf5d470228f9b4cf2c861610",
+  {
+    input: {
+      image: "https://replicate.delivery/pbxt/MvZmCkr5rzQLtsfOGziHpX7OK2kbRC5fAmAcVk39JQotwzmD/image.png",
+      prompt: "replace moth with a small humming bird",
+      size_level: 512,
+      output_format: "webp",
+      output_quality: 80
+    }
+  }
+);
+
+// To access the file URL:
+console.log(output.url()); //=> "http://example.com"
+
+// To write the file to disk:
+fs.writeFile("my-image.png", output);
 </script>
   
