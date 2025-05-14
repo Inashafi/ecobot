@@ -1,0 +1,76 @@
+/* Base Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom right, #e8f5e9, #fffde7); /* Light green to light yellow */
+  color: #2e7d32; /* Dark green */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* Header */
+h1 {
+  color: #388e3c; /* Medium green */
+  margin-bottom: 20px;
+}
+
+/* Start Button */
+button {
+  background-color: #cddc39; /* Lime */
+  color: #1b5e20; /* Dark green */
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+}
+
+button:hover {
+  background-color: #aed581; /* Light green */
+}
+
+/* Webcam Container */
+#webcam-container {
+  border: 4px solid #81c784; /* Light green */
+  border-radius: 12px;
+  padding: 10px;
+  background-color: #f1f8e9; /* Very light green */
+  margin-bottom: 20px;
+}
+
+/* Label Container */
+#label-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fffde7; /* Light yellow */
+  border: 2px solid #fbc02d; /* Yellow */
+  border-radius: 8px;
+  padding: 10px;
+  width: 220px;
+}
+
+#label-container div {
+  font-size: 14px;
+  margin: 4px 0;
+  color: #33691e; /* Dark green */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  #label-container {
+    width: 90%;
+  }
+
+  button {
+    width: 90%;
+  }
+}
