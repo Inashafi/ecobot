@@ -8,10 +8,12 @@
 
 </head>
 <body>   
-<div><h1>EcoBot</h1></div>
+<div><h1>EcoBot</h1>
+<h2>Your Friend To Recycle</h2></div>
 <button type="button" onclick="init()">Start</button>
 <div id="webcam-container"></div>
 <div id="label-container"></div>
+
 
 <!-- Result Display -->
     <div id="result-screen" style="display:none; text-align:center; margin-top:20px;">
@@ -22,6 +24,12 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 <script type="text/javascript">
+
+    <figure class="recycle-item">
+  <img id="classified-image" src="placeholder.jpg" alt="Detected item" />
+  <figcaption id="recycle-guidance">Awaiting classification...</figcaption>
+</figure>
+
     // More API functions here:
     // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
 
