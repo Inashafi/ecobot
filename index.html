@@ -4,69 +4,118 @@
     <link rel="stylesheet" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <i class="fas fa-recycle"></i>
-
+    <title>EcoBot</title>
 </head>
 <body>   
-<div>Teachable Machine Image Model</div>
-<button type="button" onclick="init()">Start</button>
-<div id="webcam-container"></div>
-<div id="label-container"></div>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
-<script type="text/javascript">
-    // More API functions here:
-    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+    <div>Teachable Machine Image Model</div>
+    <button type="button" onclick="init()">Start</button>
+    <div style="margin-bottom: 10px;">
+        <button onclick="flipCamera()">Flip Camera</button>
+    </div>
+    <div id="webcam-container"></div>
+    <div id="label-container"></div>
 
-    // the link to your model provided by Teachable Machine export panel
-    const URL = "https://teachablemachine.withgoogle.com/models/3F5_pwguo/";
+    <!-- Result Display -->
+    <div id="result-screen" style="display:none; text-align:center; margin-top:20px;">
+        <img id="result-image" src="" alt="Detected Item" style="max-width:200px;"><br>
+        <p id="result-label" style="font-weight:bold;"></p>
+        <p id="recycle-message" style="color:green;"></p>
+    </div>
 
-    let model, webcam, labelContainer, maxPredictions;
+    <!-- TensorFlow and Teachable Machine scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 
-    // Load the image model and setup the webcam
-    async function init() {
-        const modelURL = URL + "model.json";
-        const metadataURL = URL + "metadata.json";
+    <script type="text/javascript">
+        const URL = "https://teachablemachine.withgoogle.com/models/3F5_pwguo/"; // Replace with your actual model URL
 
-        // load the model and metadata
-        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
-        // or files from your local hard drive
-        // Note: the pose library adds "tmImage" object to your window (window.tmImage)
-        model = await tmImage.load(modelURL, metadataURL);
-        maxPredictions = model.getTotalClasses();
+        let model, webcam, labelContainer, maxPredictions;
+        let currentStream;
+        let usingFrontCamera = true;
 
-        // Convenience function to setup a webcam
-        const flip = true; // whether to flip the webcam
-        webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
-        await webcam.setup(); // request access to the webcam
-        await webcam.play();
-        window.requestAnimationFrame(loop);
-
-        // append elements to the DOM
-        document.getElementById("webcam-container").appendChild(webcam.canvas);
-        labelContainer = document.getElementById("label-container");
-        for (let i = 0; i < maxPredictions; i++) { // and class labels
-            labelContainer.appendChild(document.createElement("div"));
+        async function flipCamera() {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+            usingFrontCamera = !usingFrontCamera;
+            await init();
         }
-    }
 
-    async function loop() {
-        webcam.update(); // update the webcam frame
-        await predict();
-        window.requestAnimationFrame(loop);
-    }
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
 
-    // run the webcam image through the image model
-    async function predict() {
-        // predict can take in an image, video or canvas html element
-        const prediction = await model.predict(webcam.canvas);
-        for (let i = 0; i < maxPredictions; i++) {
-            const classPrediction =
-                prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-            labelContainer.childNodes[i].innerHTML = classPrediction;
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+
+            const flip = usingFrontCamera ? true : false;
+            webcam = new tmImage.Webcam(200, 200, flip);
+            await webcam.setup();
+            await webcam.play();
+            window.requestAnimationFrame(loop);
+
+            document.getElementById("webcam-container").innerHTML = "";
+            document.getElementById("webcam-container").appendChild(webcam.canvas);
+
+            labelContainer = document.getElementById("label-container");
+            labelContainer.innerHTML = "";
+            for (let i = 0; i < maxPredictions; i++) {
+                labelContainer.appendChild(document.createElement("div"));
+            }
+
+            currentStream = webcam.webcam.stream;
         }
-    }
-</script>
+
+        async function loop() {
+            webcam.update();
+            await predict();
+            window.requestAnimationFrame(loop);
+        }
+
+        async function predict() {
+            const prediction = await model.predict(webcam.canvas);
+            prediction.sort((a, b) => b.probability - a.probability);
+
+            for (let i = 0; i < maxPredictions; i++) {
+                const classPrediction =
+                    prediction[i].className + ": " + (prediction[i].probability * 100).toFixed(2) + "%";
+                labelContainer.childNodes[i].innerHTML = classPrediction;
+            }
+
+            const topPrediction = prediction[0];
+            if (topPrediction.probability > 0.85) {
+                showResult(topPrediction.className);
+            }
+        }
+
+        function showResult(label) {
+            const resultScreen = document.getElementById("result-screen");
+            const resultImage = document.getElementById("result-image");
+            const resultLabel = document.getElementById("result-label");
+            const recycleMessage = document.getElementById("recycle-message");
+
+            let message = "";
+            let imageUrl = "";
+
+            if (label.includes("Plastic")) {
+                message = "Please rinse and place plastic in the recycling bin.";
+                imageUrl = "images/plastic.png";
+            } else if (label.includes("Organic")) {
+                message = "Compost organic waste to enrich soil.";
+                imageUrl = "images/organic.png";
+            } else if (label.includes("Metal")) {
+                message = "Recycle metal items at a local facility.";
+                imageUrl = "images/metal.png";
+            } else {
+                message = "Please dispose of properly based on local guidelines.";
+                imageUrl = "images/general.png";
+            }
+
+            resultImage.src = imageUrl;
+            resultLabel.textContent = `Detected: ${label}`;
+            recycleMessage.textContent = message;
+            resultScreen.style.display = "block";
+        }
+    </script>
 </body>
 </html>
-  
