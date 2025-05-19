@@ -81,6 +81,32 @@
             labelContainer.childNodes[i].innerHTML = classPrediction;
         }
     }
+    function updateRecyclingInfo(classification) {
+  const guidance = {
+    Plastic: {
+      message: "Plastic detected: Please rinse and place in the blue recycling bin.",
+      image: "images/plastic.jpg"
+    },
+    Paper: {
+      message: "Paper detected: Flatten and place in the green recycling bin.",
+      image: "images/paper.jpg"
+    },
+    Metal: {
+      message: "Metal detected: Ensure it's clean and place in the yellow recycling bin.",
+      image: "images/metal.jpg"
+    },
+    // Add more classifications as needed
+  };
+
+  const info = guidance[classification] || {
+    message: "Item not recognized. Please try again.",
+    image: "images/unknown.jpg"
+  };
+
+  document.getElementById("classified-image").src = info.image;
+  document.getElementById("recycle-guidance").textContent = info.message;
+}
+
 </script>
 </body>
 </html>
