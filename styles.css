@@ -74,3 +74,48 @@ button:hover {
     width: 90%;
   }
 }
+.recycle-item {
+  text-align: center;
+  margin: 20px auto;
+  max-width: 300px;
+  border: 2px solid #4CAF50; /* Green border */
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.recycle-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.recycle-item figcaption {
+  margin-top: 10px;
+  font-size: 1em;
+  color: #333;
+  font-weight: bold;
+}
+.recycle-item {
+  text-align: center;
+  margin: 20px auto;
+  max-width: 300px;
+  border: 2px solid #4CAF50; /* Green border */
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.recycle-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.recycle-item figcaption {
+  margin-top: 10px;
+  font-size: 1em;
+  color: #333;
+  font-weight: bold;
+}
+
