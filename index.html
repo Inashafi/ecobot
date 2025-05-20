@@ -90,11 +90,11 @@
   const guidance = {
     Plastic: {
       message: "Plastic detected: Please rinse and place in the blue recycling bin.",
-      image: "images/plastic.jpg"
+      image: "images/plastic.jpeg"
     },
     Paper: {
       message: "Paper detected: Flatten and place in the green recycling bin.",
-      image: "images/paper.jpg"
+      image: "images/paper.jpeg"
     },
     Metal: {
       message: "Metal detected: Ensure it's clean and place in the yellow recycling bin.",
@@ -105,7 +105,7 @@
 
   const info = guidance[classification] || {
     message: "Item not recognized. Please try again.",
-    image: "images/unknown.jpg"
+    image: "images/unknown.jpeg"
   };
 
   document.getElementById("classified-image").src = info.image;
